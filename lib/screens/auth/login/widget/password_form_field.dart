@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../view_model/login_view_model.dart';
+import '../../../../view_model/auth_view_model.dart';
+
 
 class PasswordFormField extends StatefulWidget {
   const PasswordFormField({
@@ -26,8 +27,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       width: double.infinity,
       height: 41,
       child: TextFormField(
-        onChanged:
-          context.read<LoginViewModel>().updatePassword,
+
 
         validator: (value) {
           if (value!.isEmpty) {

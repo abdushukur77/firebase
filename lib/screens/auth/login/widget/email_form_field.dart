@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../view_model/login_view_model.dart';
+import '../../../../view_model/auth_view_model.dart';
+
+
 
 class EmailFormField extends StatelessWidget {
   const EmailFormField({
@@ -22,8 +24,7 @@ class EmailFormField extends StatelessWidget {
       width: double.infinity,
       height: 41,
       child: TextFormField(
-        onChanged:
-          context.read<LoginViewModel>().updateEmail,
+
         validator: (value) {
           if (value!.isEmpty) {
             return "Ma'lumotni to'ldiring";

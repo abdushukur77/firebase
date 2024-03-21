@@ -13,8 +13,9 @@ class AppImages {
   //.svg
 
   // static const String facebook="assets/icons/facebook.svg";
-  static const String log="assets/icons/log.svg";
+  static const String log="assets/icons/login.svg";
   static const String sms="assets/icons/sms.svg";
+  static const String person="assets/icons/person.svg";
 
 
 

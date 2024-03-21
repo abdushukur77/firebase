@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:library_app/screens/login/view_model/login_view_model.dart';
-import 'package:library_app/screens/login/widget/email_form_field.dart';
-import 'package:library_app/screens/login/widget/password_form_field.dart';
+import 'package:library_app/screens/auth/login/widget/email_form_field.dart';
+import 'package:library_app/screens/auth/login/widget/password_form_field.dart';
+import 'package:library_app/screens/routes.dart';
 import 'package:provider/provider.dart';
 
-import '../home/home_screen.dart';
+import '../../../view_model/auth_view_model.dart';
+import '../../home/home_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -18,8 +19,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
+
+
   final _formKey = GlobalKey<FormState>();
   bool isValue = false;
 
@@ -45,7 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFF000000),
-        body: Padding(
+        body: context.watch<AuthViewModel>().loading
+            ? const Center(child: CircularProgressIndicator())
+            :Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Form(
             key: _formKey,
@@ -116,7 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: InkWell(
                       borderRadius: BorderRadius.circular(50),
                       onTap: () {
-                        context.read<LoginViewModel>().login(context);
+                        context.read<AuthViewModel>().loginUser(
+                            context, email: emailController.text,
+                            password: passwordController.text,
+                            );
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(vertical: 17),
@@ -186,6 +193,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ]
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.registerRoute);
+                  },
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
                 ),
 
               ],

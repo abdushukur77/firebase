@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:library_app/screens/auth/login/widget/email_form_field.dart';
 import 'package:library_app/screens/auth/login/widget/password_form_field.dart';
 import 'package:library_app/screens/routes.dart';
+import 'package:library_app/screens/tabs/tab_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../view_model/auth_view_model.dart';
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Future.microtask(() {
       if (user != null) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return HomeScreen();
+          return TabScreen();
         }));
       }
     });
@@ -161,7 +162,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: const BoxDecoration(
                           color: Color(0xFF262626), shape: BoxShape.circle),
                       child: TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+
+context.read<AuthViewModel>().signInWithGoogle(context,null);
+
+                        },
                         child: Center(
                           child: SvgPicture.asset('assets/icons/google.svg'),
                         ),

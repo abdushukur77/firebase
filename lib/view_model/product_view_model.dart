@@ -59,8 +59,8 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   deleteProduct(String docId, BuildContext context) async {
-    try {
-      //create
+    try  {
+      //created
       _notify(true);
       await FirebaseFirestore.instance.collection("products").doc(docId).delete();
 

@@ -162,6 +162,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                          ),
                                          context,
                                        );
+                                       Navigator.pop(context);
                                      },
                                      icon: const Icon(
                                        Icons.add,

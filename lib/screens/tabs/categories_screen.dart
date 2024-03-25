@@ -48,17 +48,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
                       showDialog(context: context, builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text(
-                            'Ogoxlantrish!!!',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+
                           content: Text(
-                            'Ishonchingiz komilmi???',
+                            'Add Category',
                             style: TextStyle(
                               color: Colors.lightBlueAccent,
                               fontSize: 18.w,

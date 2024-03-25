@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:provider/provider.dart';
 
+import '../../../utils/colors/app_colors.dart';
 import '../../data/model/category_model.dart';
 import '../../view_model/category_view_model.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen({super.key});
+  CategoriesScreen({super.key});
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -14,91 +18,306 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
+    String categoriesName = "";
+    String imageURL = "";
+    String docId = "";
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Categories"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.read<CategoryViewModel>().insertCategory(
-                CategoryModel(
-                  imageUrl:
-                  "https://static-assets.business.amazon.com/assets/in/24th-jan/705_Website_Blog_Appliances_1450x664.jpg.transform/1450x664/image.jpg",
-                  categoryName: "Maishiy texnikalar",
-                  docId: "",
-                ),
-                context,
-              );
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
+        title: const Text("Categories",style: TextStyle(color: AppColors.c_2C2C73,),),
+
       ),
-      body: StreamBuilder<List<CategoryModel>>(
-        stream: context.read<CategoryViewModel>().listenCategories(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
-          }
-          if (snapshot.hasData) {
-            List<CategoryModel> list = snapshot.data as List<CategoryModel>;
-            return ListView(
-              children: [
-                ...List.generate(
-                  list.length,
-                      (index) {
-                    CategoryModel category = list[index];
-                    return ListTile(
-                      leading: Image.network(
-                        category.imageUrl,
-                        width: 50,
-                      ),
-                      title: Text(category.categoryName),
-                      subtitle: Text(category.docId),
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 25.w,
+        ),
+        child: StreamBuilder<List<CategoryModel>>(
+          stream: context.read<CategoryViewModel>().listenCategories(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            }
+            if (snapshot.hasData) {
+              List<CategoryModel> list = snapshot.data as List<CategoryModel>;
+              return ListView(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [IconButton(onPressed: (){
+
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Ogoxlantrish!!!',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          content: Text(
+                            'Ishonchingiz komilmi???',
+                            style: TextStyle(
+                              color: Colors.lightBlueAccent,
+                              fontSize: 18.w,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          actions: <Widget>[
+                           Column(children: [
+                             TextField(
+                               style: TextStyle(color: Colors.black),
+                               textInputAction: TextInputAction.next,
+                               onChanged: (v) {
+                                 categoriesName = v;
+                               },
+                               decoration: InputDecoration(
+                                   floatingLabelBehavior: FloatingLabelBehavior.always,
+                                   fillColor: Colors.white,
+                                   filled: true,
+                                   hintMaxLines: 4,
+                                   contentPadding:
+                                   EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                   hintText: "Categories Name",
+                                   hintStyle: TextStyle(color: Colors.black, fontSize: 14),
+                                   enabledBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.black),
+                                       borderRadius: BorderRadius.circular(12)),
+                                   disabledBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.black),
+                                       borderRadius: BorderRadius.circular(12)),
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: AppColors.black),
+                                       borderRadius: BorderRadius.circular(12))),
+                             ),
+                             SizedBox(
+                               height: 10.h,
+                             ),
+                             TextField(
+                               style: TextStyle(color: Colors.black),
+                               textInputAction: TextInputAction.next,
+                               onChanged: (v) {
+                                 imageURL = v;
+                               },
+                               decoration: InputDecoration(
+                                   floatingLabelBehavior: FloatingLabelBehavior.always,
+                                   fillColor: Colors.white,
+                                   filled: true,
+                                   hintMaxLines: 4,
+                                   contentPadding:
+                                   EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                   hintText: "Image Url",
+                                   hintStyle: TextStyle(color: Colors.black, fontSize: 14),
+                                   enabledBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.black),
+                                       borderRadius: BorderRadius.circular(12)),
+                                   disabledBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.black),
+                                       borderRadius: BorderRadius.circular(12)),
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: AppColors.black),
+                                       borderRadius: BorderRadius.circular(12))),
+                             ),
+                             SizedBox(
+                               height: 10.h,
+                             ),
+                             TextField(
+                               style: TextStyle(color: Colors.black),
+                               textInputAction: TextInputAction.next,
+                               onChanged: (v) {
+                                 docId = v;
+                               },
+                               decoration: InputDecoration(
+                                   floatingLabelBehavior: FloatingLabelBehavior.always,
+                                   fillColor: Colors.white,
+                                   filled: true,
+                                   hintMaxLines: 4,
+                                   contentPadding:
+                                   EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                   hintText: "Doc ID",
+                                   hintStyle: const TextStyle(color: Colors.black, fontSize: 14),
+                                   enabledBorder: OutlineInputBorder(
+                                       borderSide: const BorderSide(color: Colors.black),
+                                       borderRadius: BorderRadius.circular(12)),
+                                   disabledBorder: OutlineInputBorder(
+                                       borderSide: const BorderSide(color: Colors.black),
+                                       borderRadius: BorderRadius.circular(12)),
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: AppColors.black),
+                                       borderRadius: BorderRadius.circular(12))),
+                             ),
+                             SizedBox(
+                               height: 10.h,
+                             ),
+                             Container(
+                               width: double.infinity,
+                               decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(15.w),
+                                 color: AppColors.c_2C2C73,
+                               ),
+                               child: Row(
+                                 children: [
+                                   Spacer(),
+                                   IconButton(
+                                     onPressed: () {
+                                       context.read<CategoryViewModel>().insertCategory(
+                                         CategoryModel(
+                                           imageUrl: imageURL,
+                                           categoryName: categoriesName,
+                                           docId: docId,
+                                         ),
+                                         context,
+                                       );
+                                     },
+                                     icon: const Icon(
+                                       Icons.add,
+                                       color: Colors.white,
+                                     ),
+                                   ),
+                                   SizedBox(
+                                     width: 5.w,
+                                   ),
+                                   const Text(
+                                     "Add Categories",
+                                     style: TextStyle(color: Colors.white),
+                                   ),
+                                   Spacer(),
+                                 ],
+                               ),
+                             ),
+
+                             SizedBox(
+                               height: 15.h,
+                             ),
+
+    ],)
+                          ],
+                        );
+                      },);},
+                     icon: Icon(Icons.add))],
+                  ),
+
+                  ...List.generate(
+                    list.length,
+                        (index) {
+                      CategoryModel category = list[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 5.h),
+                        padding: EdgeInsets.all(10.w),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.w),
+                            color: Colors.white,
+                            border: Border.all(
+                                width: 1, color: AppColors.c_2C2C73)),
+                        child: Column(
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                context
-                                    .read<CategoryViewModel>()
-                                    .deleteCategory(category.docId, context);
-                              },
-                              icon: const Icon(Icons.delete),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                context
-                                    .read<CategoryViewModel>()
-                                    .updateCategory(
-                                  CategoryModel(
-                                    imageUrl:
-                                    "https://dnr.wisconsin.gov/sites/default/files/feature-images/ECycle_Promotion_Manufacturers.jpg",
-                                    categoryName: "Electronics",
-                                    docId: category.docId,
+                            Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.w),
+                                  child: Image.network(
+                                    category.imageUrl,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
                                   ),
-                                  context,
-                                );
-                              },
-                              icon: const Icon(Icons.edit),
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      category.categoryName,
+                                      style: const TextStyle(
+                                        color: AppColors.c_2C2C73,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      category.docId,
+                                      style: TextStyle(color: AppColors.c_2C2C73),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.w),
+                                    color: AppColors.c_2C2C73,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<CategoryViewModel>()
+                                          .deleteCategory(
+                                          category.docId, context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: 145.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.w),
+                                    color: AppColors.c_2C2C73,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<CategoryViewModel>()
+                                          .updateCategory(
+                                        CategoryModel(
+                                          imageUrl:
+                                          "https://dnr.wisconsin.gov/sites/default/files/feature-images/ECycle_Promotion_Manufacturers.jpg",
+                                          categoryName: "Electronics",
+                                          docId: category.docId,
+                                        ),
+                                        context,
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                    },
+                  )
+                ],
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
+
     );
   }
 }

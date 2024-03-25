@@ -5,6 +5,7 @@ import 'package:library_app/screens/routes.dart';
 import 'package:library_app/screens/splash/splash_screen.dart';
 import 'package:library_app/view_model/auth_view_model.dart';
 import 'package:library_app/view_model/category_view_model.dart';
+import 'package:library_app/view_model/product_view_model.dart';
 import 'package:library_app/view_model/tab_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,8 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => AuthViewModel()),
       ChangeNotifierProvider(create: (_) => TabViewModel()),
-      ChangeNotifierProvider(create: (_)=>CategoryViewModel())
+      ChangeNotifierProvider(create: (_)=>CategoryViewModel()),
+      ChangeNotifierProvider(create: (_)=>ProductViewModel())
     ],
     child: ScreenUtilInit( // Wrap with ScreenUtilInit
       designSize: const Size(375, 812), // Set your design size

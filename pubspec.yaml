@@ -30,7 +30,8 @@ dependencies:
   firebase_auth: ^4.17.9
   google_sign_in: ^6.2.1
   cloud_firestore: ^4.15.9
-
+  searchable_listview: ^2.10.2
+  flutter_rating_bar: ^4.0.1
 
 
 

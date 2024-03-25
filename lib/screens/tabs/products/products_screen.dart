@@ -21,22 +21,25 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Products",style: TextStyle(color: AppColors.c_2C2C73),),
+        title: const Text(
+          "Products",
+          style: TextStyle(color: AppColors.c_2C2C73),
+        ),
         actions: [
           IconButton(
             onPressed: () {
               context.read<ProductViewModel>().insertProduct(
-                ProductModel(
-                  price: 12.5,
-                  imageUrl:
-                  "https://i.ebayimg.com/images/g/IUMAAOSwZGBkTR-K/s-l400.png",
-                  productName: "Nokia 12 80",
-                  docId: "",
-                  productDescription: "productDescription",
-                  categoryId: "kcggCJzOEz7gH1LQy44x",
-                ),
-                context,
-              );
+                    ProductModel(
+                      price: 12.5,
+                      imageUrl:
+                          "https://i.ebayimg.com/images/g/IUMAAOSwZGBkTR-K/s-l400.png",
+                      productName: "Nokia 12 80",
+                      docId: "",
+                      productDescription: "productDescription",
+                      categoryId: "kcggCJzOEz7gH1LQy44x",
+                    ),
+                    context,
+                  );
             },
             icon: const Icon(Icons.add),
           ),
@@ -54,7 +57,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
             List<ProductModel> list = snapshot.data as List<ProductModel>;
             return ListView(
               children: [
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: GridView.count(
@@ -70,23 +72,29 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ...List.generate(list.length, (index) {
                         ProductModel productModel = list[index];
                         // ProductModel productModel =
-                        // context.watch<ProductsViewModel>().categoryProduct[index];
+                        // context.watch<ProductViewModel>().categoryProduct[index];
                         return InkWell(
                           borderRadius: BorderRadius.circular(20.w),
                           onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                                  return DetailScreen(productModel1: productModel,
-
+                            debugPrint(productModel.productName);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return DetailScreen(
+                                    productModel1: productModel,
                                   );
-                                }));
+                                },
+                              ),
+                            );
                           },
-                          child: const ProductsItem(
+                          child:  ProductsItem(
                             docId: '',
-                            productName: 'Samsung',
+                            productName: productModel.productName,
                             productDescription: 'zor telfon',
                             price: 2500,
-                            imageUrl: 'https://cdn.mediapark.uz/imgs/1a0ef8f0-8d3e-41db-ad98-a655c10cbd9b.webp',
+                            imageUrl:
+                                productModel.imageUrl.toString(),
                             categoryId: '',
                           ),
                         );

@@ -22,8 +22,9 @@ class EmailFormField extends StatelessWidget {
         color: const Color(0xFF262626),
       ),
       width: double.infinity,
-      height: 41,
+
       child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
 
         validator: (value) {
           if (value!.isEmpty) {
@@ -36,6 +37,7 @@ class EmailFormField extends StatelessWidget {
           color: Colors.white,
         ),
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.zero,
           labelStyle: const TextStyle(
             color: Colors.white,
           ),

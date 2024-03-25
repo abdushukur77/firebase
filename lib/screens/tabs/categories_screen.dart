@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:provider/provider.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import '../../../utils/colors/app_colors.dart';
 import '../../data/model/category_model.dart';
@@ -196,7 +197,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     list.length,
                         (index) {
                       CategoryModel category = list[index];
-                      return Container(
+                      return ZoomTapAnimation(
+                          onTap: (){},
+                          child: Container(
                         margin: EdgeInsets.symmetric(vertical: 5.h),
                         padding: EdgeInsets.all(10.w),
                         decoration: BoxDecoration(
@@ -298,7 +301,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             )
                           ],
                         ),
-                      );
+                      ));
                     },
                   )
                 ],

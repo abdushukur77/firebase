@@ -13,6 +13,8 @@ class ProductViewModel extends ChangeNotifier {
       .snapshots()
       .map((event) =>
           event.docs.map((doc) => ProductModel.fromJson(doc.data())).toList());
+  List<ProductModel> categoryProduct = [];
+
 
   insertProduct(ProductModel productModel, BuildContext context) async {
     try {
@@ -36,6 +38,18 @@ class ProductViewModel extends ChangeNotifier {
         message: error.code,
       );
     }
+  }
+  Future<void> getProductsByCategory(String categoryDocId) async {
+    _notify(true);
+    await FirebaseFirestore.instance
+        .collection("products")
+        .where("category_id", isEqualTo: categoryDocId)
+        .get()
+        .then((snapshot) {
+      categoryProduct =
+          snapshot.docs.map((e) => ProductModel.fromJson(e.data())).toList();
+    });
+    _notify(false);
   }
 
   updateProduct(ProductModel productModel, BuildContext context) async {

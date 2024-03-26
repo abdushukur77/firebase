@@ -5,7 +5,7 @@ class AppImages {
   static const String book2="assets/images/book2.png";
   static const String books="assets/images/books.png";
   // static const String fontregistr="assets/images/fontregistr.png";
-  static const String img="assets/images/img.png";
+  static const String img="assets/images/app_icon.png";
 
 
 

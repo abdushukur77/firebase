@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:library_app/services/local_notification_service.dart';
 
 import 'package:provider/provider.dart';
 
@@ -7,7 +8,7 @@ import '../../../data/model/product_model.dart';
 import '../../../utils/colors/app_colors.dart';
 import '../../../view_model/product_view_model.dart';
 import '../detail_screen.dart';
-import 'book_widget.dart';
+import 'product_widget.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -16,7 +17,9 @@ class ProductsScreen extends StatefulWidget {
   State<ProductsScreen> createState() => _ProductsScreenState();
 }
 
+
 class _ProductsScreenState extends State<ProductsScreen> {
+  int id=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +35,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ProductModel(
                       price: 12.5,
                       imageUrl:
-                          "https://i.ebayimg.com/images/g/IUMAAOSwZGBkTR-K/s-l400.png",
-                      productName: "Nokia 12 80",
+                          "https://olcha.uz/image/600x600/products/2022-02-10/smartfon-samsung-galaxy-s22-ultra-5g-35759-0.png",
+                      productName: "S22 Ultra",
                       docId: "",
                       productDescription: "productDescription",
-                      categoryId: "kcggCJzOEz7gH1LQy44x",
+                      categoryId: "",
                     ),
                     context,
                   );
+              LocalNotificationService().showNotification(title: "Product qoshildi", body: "Mahsulot qo'shib bo'lindi", id: id);
             },
             icon: const Icon(Icons.add),
           ),

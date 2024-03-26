@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../utils/colors/app_colors.dart';
 import '../../data/model/product_model.dart';
+import '../../services/local_notification_service.dart';
 import '../../utils/styles/app_text_style.dart';
 import '../../view_model/product_view_model.dart';
 
@@ -22,6 +23,7 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  int id=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,8 +69,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 height: 5.h,
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
                                 child: const Text("Mahsulot nomi", maxLines: 1),
                               ),
                               SizedBox(
@@ -91,8 +92,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 height: 5.h,
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
                                 child: const Text("Tavsif"),
                               ),
                               SizedBox(
@@ -114,13 +114,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                 height: 5.h,
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
                                 child: const Text("Narxi"),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
                                 child: Row(
                                   children: [
                                     Text(
@@ -167,12 +165,6 @@ class _DetailScreenState extends State<DetailScreen> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: const Text(
-                        "Kitob haqida",
-                      ),
-                    ),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -187,8 +179,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ),
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
               child: Row(
                 children: [
                   InkWell(
@@ -199,7 +190,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text(
-                              'Ogoxlantrish!!!',
+                              'Ogohlantrish !',
                               style: TextStyle(
                                 color: Colors.red,
                                 fontSize: 20.w,
@@ -208,7 +199,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               textAlign: TextAlign.center,
                             ),
                             content: Text(
-                              'Ishonchingiz komilmi???',
+                              'Ishonchingiz komilmi ?',
                               style: TextStyle(
                                 color: Colors.lightBlueAccent,
                                 fontSize: 18.w,
@@ -233,7 +224,14 @@ class _DetailScreenState extends State<DetailScreen> {
                                           .deleteProduct(
                                               widget.productModel1.docId,
                                               context);
-                                      Navigator.pop(context);
+                                      LocalNotificationService()
+                                          .showNotification(
+                                        title:
+                                            "Mahsulot muvaffaqiyatli o'chirildi",
+                                        body: "",
+                                        id: id,
+                                      );
+
                                       Navigator.pop(context);
                                     },
                                     child: Text('Ha'),

@@ -43,11 +43,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Row(
                           children: [
-                             CircleAvatar(
-                              radius: 50.0,
-                              backgroundImage: AssetImage(
-                                  user.photoURL.toString()), // Replace with your image path
-                            ),
+                            if (user.photoURL != null)
+                              Image.network(
+                                user.photoURL!,
+                                width: 100.w,
+                                height: 100.h,
+                              ),
                             const SizedBox(width: 20.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,11 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-                        Text(
-                          user.uid,
-                          style:
-                              AppTextStyle.interSemiBold.copyWith(fontSize: 24),
-                        ),
+
                         SizedBox(height: 12.h),
                         Text(
                           user.email.toString(),
@@ -83,19 +80,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style:
                               AppTextStyle.interSemiBold.copyWith(fontSize: 24),
                         ),
-                        if (user.photoURL != null)
-                          Image.network(
-                            user.photoURL!,
-                            width: 200,
-                            height: 200,
-                          ),
-                        IconButton(
-                          onPressed: () {
-                            context.read<AuthViewModel>().updateImageUrl(
-                                "https://www.tenforums.com/attachments/tutorials/146359d1501443008-change-default-account-picture-windows-10-a-user.png");
-                          },
-                          icon: const Icon(Icons.image),
-                        )
+                        // if (user.photoURL != null)
+                        //   Image.network(
+                        //     user.photoURL!,
+                        //     width: 200,
+                        //     height: 200,
+                        //   ),
+                        // IconButton(
+                        //   onPressed: () {
+                        //     context.read<AuthViewModel>().updateImageUrl(
+                        //         "https://www.tenforums.com/attachments/tutorials/146359d1501443008-change-default-account-picture-windows-10-a-user.png");
+                        //   },
+                        //   icon: const Icon(Icons.image),
+                        // )
                       ],
                     ),
                   ),

@@ -1,14 +1,24 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:library_app/services/local_notification_service.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../../data/api_provider/api_provider.dart';
+import '../../../data/model/notification_model.dart';
 import '../../../data/model/product_model.dart';
+import '../../../data/model/push_notification_model.dart';
+import '../../../main.dart';
 import '../../../utils/colors/app_colors.dart';
+import '../../../view_model/notification_view_model.dart';
 import '../../../view_model/product_view_model.dart';
+import '../../../view_model/push_notification_view_model.dart';
 import '../detail_screen.dart';
 import 'product_widget.dart';
+
+
+
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -19,7 +29,64 @@ class ProductsScreen extends StatefulWidget {
 
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  int id=0;
+
+  String fcmToken = "";
+
+  void init() async {
+    fcmToken = await FirebaseMessaging.instance.getToken() ?? "";
+    debugPrint("FCM TOKEN:$fcmToken");
+    final token = await FirebaseMessaging.instance.getAPNSToken();
+    debugPrint("getAPNSToken : ${token.toString()}");
+    LocalNotificationService.localNotificationService;
+    //Foreground
+    FirebaseMessaging.onMessage.listen(
+          (RemoteMessage remoteMessage) {
+        if (remoteMessage.notification != null) {
+          LocalNotificationService().showNotification(
+            title: remoteMessage.notification!.title!,
+            body: remoteMessage.notification!.body!,
+            id: DateTime.now().second.toInt(),
+          );
+
+          debugPrint(
+              "FOREGROUND NOTIFICATION:${remoteMessage.notification!.title}");
+        }
+      },
+    );
+    //Background
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
+      debugPrint("ON MESSAGE OPENED APP:${remoteMessage.notification!.title}");
+    });
+    // Terminated
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        debugPrint("TERMINATED:${message.notification?.title}");
+      }
+    });
+  }
+  // _init() async {
+  //
+  //
+  //   String? fcmToken = await FirebaseMessaging.instance.getToken();
+  //   debugPrint("Tokeeeennnnnn ${fcmToken}");
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
+  //
+  //     if (remoteMessage.notification != null) {
+  //       LocalNotificationService().showNotification(
+  //         title: remoteMessage.notification!.title!,
+  //         body: remoteMessage.notification!.body!,
+  //         id: remoteMessage.notification!.hashCode,
+  //       );
+  //     }
+  //   });
+  // }
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +97,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: ()async {
               context.read<ProductViewModel>().insertProduct(
                     ProductModel(
                       price: 12.5,
@@ -43,7 +110,38 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                     context,
                   );
-              LocalNotificationService().showNotification(title: "Product qoshildi", body: "Mahsulot qo'shib bo'lindi", id: id);
+              // NotificationModel notification = NotificationModel(
+              //     name: "Yangi Mahsulot qo'shildi!",
+              //     id: DateTime.now().millisecond);
+              // context
+              //     .read<NotificationViewModel>()
+              //     .addNotification(notification);
+              //
+              // LocalNotificationService().showNotification(
+              //   title: notification.name,
+              //   body: "Ma'lumot olishingiz mumkin",
+              //   id: notification.id,
+              // );
+              String messageId = await ApiProvider().sendNotificationToUsers(
+                fcmToken: fcmToken,
+                title: "Bu test notification",
+                body: "Yana test notiifcation",
+              );
+              debugPrint("MESSAGE ID:$messageId");
+
+              PushNotificationModel notification = PushNotificationModel(
+                  name: "Yangi Mahsulot qo'shildi!",
+                  id: DateTime.now().millisecond);
+              context
+                  .read<PushNotificationViewModel>()
+                  .addNotification(notification);
+
+              // LocalNotificationService().showNotification(
+              //   title: notification.name,
+              //   body: "Ma'lumot olishingiz mumkin",
+              //   id: notification.id,
+              // );
+              // debugPrint("salommmmmmmmm");
             },
             icon: const Icon(Icons.add),
           ),
@@ -92,13 +190,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               ),
                             );
                           },
-                          child:  ProductsItem(
+                          child: ProductsItem(
                             docId: '',
                             productName: productModel.productName,
                             productDescription: 'zor telfon',
                             price: 2500,
-                            imageUrl:
-                                productModel.imageUrl.toString(),
+                            imageUrl: productModel.imageUrl.toString(),
                             categoryId: '',
                           ),
                         );

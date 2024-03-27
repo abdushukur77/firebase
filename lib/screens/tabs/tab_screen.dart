@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/screens/tabs/categories_screen.dart';
+import 'package:library_app/screens/tabs/notification/notifications_screen.dart';
 import 'package:library_app/screens/tabs/products/products_screen.dart';
 import 'package:library_app/screens/tabs/profile/profile_screen.dart';
+import 'package:library_app/screens/tabs/push_screen/push_screen.dart';
 import 'package:library_app/view_model/tab_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,7 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  List<Widget> screens = [ProductsScreen(), ProfileScreen(),CategoriesScreen()];
+  List<Widget> screens = [ProductsScreen(), ProfileScreen(),CategoriesScreen(),NotificationScreen(),PushNotificationScreen(),];
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class _TabScreenState extends State<TabScreen> {
         onTap: (newIndex) {
           context.read<TabViewModel>().changeIndex(newIndex);
         },
+        type: BottomNavigationBarType.fixed,
         items: [
 
           BottomNavigationBarItem(
@@ -46,6 +49,20 @@ class _TabScreenState extends State<TabScreen> {
               label: "Categories",
               activeIcon: Icon(
                 Icons.category_outlined,
+                color: Colors.blueAccent,
+              )),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: "Notifications",
+              activeIcon: Icon(
+                Icons.notifications,
+                color: Colors.blueAccent,
+              )),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.public_sharp),
+              label: "PushNotifications",
+              activeIcon: Icon(
+                Icons.public_sharp,
                 color: Colors.blueAccent,
               )),
         ],

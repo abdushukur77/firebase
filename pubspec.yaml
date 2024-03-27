@@ -34,6 +34,8 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_local_notifications: ^17.0.0
   flutter_timezone: ^1.0.4
+  firebase_messaging: ^14.7.20
+  overlay_support: ^2.1.0
 
 
 

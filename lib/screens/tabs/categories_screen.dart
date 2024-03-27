@@ -6,9 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import '../../../utils/colors/app_colors.dart';
+import '../../data/api_provider/api_provider.dart';
 import '../../data/model/category_model.dart';
+import '../../data/model/notification_model.dart';
+import '../../data/model/push_notification_model.dart';
 import '../../services/local_notification_service.dart';
 import '../../view_model/category_view_model.dart';
+import '../../view_model/notification_view_model.dart';
+import '../../view_model/push_notification_view_model.dart';
 
 class CategoriesScreen extends StatefulWidget {
   CategoriesScreen({super.key});
@@ -18,7 +23,9 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-   int id=0;
+
+
+
   @override
   Widget build(BuildContext context) {
     String categoriesName = "";
@@ -159,7 +166,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                             children: [
                                               Spacer(),
                                               IconButton(
-                                                onPressed: () {
+                                                onPressed: () async{
                                                   context
                                                       .read<CategoryViewModel>()
                                                       .insertCategory(
@@ -171,14 +178,30 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                         ),
                                                         context,
                                                       );
-                                                  LocalNotificationService()
-                                                      .showNotification(
-                                                    title:
-                                                        "Category Muvaffaqiyatli qo'shildi",
-                                                    body:
-                                                        "Mahsulot qo'shib bo'lindi",
-                                                    id: id++,
+                                                  // NotificationModel notification = NotificationModel(
+                                                  //     name: "Kategoriya muvaffaqiyatli qoshildi!",
+                                                  //     id: DateTime.now().millisecond
+                                                  // );
+                                                  // context.read<NotificationViewModel>().addNotification(notification);
+                                                  //
+                                                  // LocalNotificationService().showNotification(
+                                                  //   title: notification.name,
+                                                  //   body: "Kategoriya muvaffaqiyatli qoshildi",
+                                                  //   id: notification.id,
+                                                  // );
+                                                  String messageId = await ApiProvider().sendNotificationToUsers(
+
+                                                    title: "Kategoriya muvaffaqiyatli qoshildi",
+                                                    body: "Kategoriya muvaffaqiyatli qoshildi",
                                                   );
+                                                  debugPrint("MESSAGE ID:$messageId");
+
+                                                  PushNotificationModel notification = PushNotificationModel(
+                                                      name: "Kategoriya muvaffaqiyatli qoshildi!",
+                                                      id: DateTime.now().millisecond);
+                                                  context
+                                                      .read<PushNotificationViewModel>()
+                                                      .addNotification(notification);
 
                                                   Navigator.pop(context);
                                                 },
@@ -285,12 +308,16 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                               .read<CategoryViewModel>()
                                               .deleteCategory(
                                                   category.docId, context);
-                                          LocalNotificationService()
-                                              .showNotification(
-                                            title:
-                                            "Kategoriya muvaffaqiyatli o'chirildi",
-                                            body: "",
-                                            id: id++,
+                                          NotificationModel notification = NotificationModel(
+                                              name: "Kategoriya muvaffaqiyatli o'chirildi!",
+                                              id: DateTime.now().millisecond
+                                          );
+                                          context.read<NotificationViewModel>().addNotification(notification);
+
+                                          LocalNotificationService().showNotification(
+                                            title: notification.name,
+                                            body: "Kategoriya muvaffaqiyatli o'chirildi",
+                                            id: notification.id,
                                           );
                                         },
                                         icon: const Icon(

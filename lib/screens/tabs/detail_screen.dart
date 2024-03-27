@@ -4,13 +4,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:library_app/screens/tabs/products/products_screen.dart';
+import 'package:library_app/view_model/push_notification_view_model.dart';
 
 import 'package:provider/provider.dart';
 
 import '../../../utils/colors/app_colors.dart';
+import '../../data/api_provider/api_provider.dart';
+import '../../data/model/notification_model.dart';
 import '../../data/model/product_model.dart';
+import '../../data/model/push_notification_model.dart';
 import '../../services/local_notification_service.dart';
 import '../../utils/styles/app_text_style.dart';
+import '../../view_model/notification_view_model.dart';
 import '../../view_model/product_view_model.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -23,7 +29,6 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  int id=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,15 +229,39 @@ class _DetailScreenState extends State<DetailScreen> {
                                           .deleteProduct(
                                               widget.productModel1.docId,
                                               context);
-                                      LocalNotificationService()
-                                          .showNotification(
-                                        title:
-                                            "Mahsulot muvaffaqiyatli o'chirildi",
-                                        body: "",
-                                        id: id,
-                                      );
 
-                                      Navigator.pop(context);
+                                      // NotificationModel notification = NotificationModel(
+                                      //     name: "Mahsulot muvaffaqiyatli o'chirildi!",
+                                      //     id: DateTime.now().millisecond
+                                      // );
+                                      // context.read<NotificationViewModel>().addNotification(notification);
+                                      //
+                                      // LocalNotificationService().showNotification(
+                                      //   title: notification.name,
+                                      //   body: "Mahsulot muvaffaqiyatli o'chirildi",
+                                      //   id: notification.id,
+                                      // );
+
+                                      PushNotificationModel notification = PushNotificationModel(
+                                          name: "Mahsulot muvaffaqiyatli o'chirildi!",
+                                          id: DateTime.now().millisecond
+                                      );
+                                      context.read<PushNotificationViewModel>().addNotification(notification);
+
+                                      String messageId = await ApiProvider().sendNotificationToUsers(
+
+                                        title: "Mahsulot muvaffaqiyatli o'chirildi",
+                                        body: "Mahsulot muvaffaqiyatli o'chirildi",
+                                      );
+                                      debugPrint("MESSAGE ID:$messageId");
+
+
+
+                                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                                       return
+                                       ProductsScreen();
+                                     }));
+
                                     },
                                     child: Text('Ha'),
                                   ),
@@ -269,6 +298,17 @@ class _DetailScreenState extends State<DetailScreen> {
                   Spacer(),
                   InkWell(
                     onTap: () {
+                      NotificationModel notification = NotificationModel(
+                          name: "Mahsulot yangilandi !",
+                          id: DateTime.now().millisecond
+                      );
+                      context.read<NotificationViewModel>().addNotification(notification);
+
+                      LocalNotificationService().showNotification(
+                        title: notification.name,
+                        body: "Mahsulot yangilandi ",
+                        id: notification.id,
+                      );
                       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>UpdateBookScreen(bookModel: widget.bookModel)));
                     },
                     borderRadius: BorderRadius.circular(20.w),

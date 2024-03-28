@@ -24,8 +24,8 @@ class ProductsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
-      height: 50,
+      width: 50.w,
+      height: 50.h,
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: AppColors.c_2C2C73),
         borderRadius: BorderRadius.circular(20.w),
@@ -38,9 +38,9 @@ class ProductsItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: SizedBox(
                 height: 165.h,
-                width: 145.w,
+                width: 150.w,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
@@ -53,23 +53,22 @@ class ProductsItem extends StatelessWidget {
             child: Text(
               productName,
               maxLines: 1,
-              style: TextStyle(fontSize: 12, color: AppColors.c_2C2C73),
+              style: TextStyle(fontSize: 12.sp, color: AppColors.c_2C2C73),
             ),
           ),
-          SizedBox(height: 5),
-          SizedBox(height: 5),
+          SizedBox(height: 5.w),
+          SizedBox(height: 5.w),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: Row(
               children: [
-                Spacer(),
                 Text(
-                  "SUM ",
+                  "SUM",
                   style: TextStyle(fontSize: 19.sp, color: Colors.blue),
                 ),
                 Text(price.toString(),
-                    style: TextStyle(fontSize: 16, color: AppColors.c_2C2C73)),
-                Spacer(),
+                    style: TextStyle(fontSize: 16.sp, color: AppColors.c_2C2C73)),
+
               ],
             ),
           )

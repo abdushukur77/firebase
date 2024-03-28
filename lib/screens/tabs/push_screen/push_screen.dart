@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:library_app/screens/permission.dart';
 
 import '../../../data/api_provider/api_provider.dart';
 import '../../../services/local_notification_service.dart';
@@ -66,60 +67,60 @@ class _PushNotificationScreenState extends State<PushNotificationScreen> {
         width: double.infinity,
         child: Column(
           children: [
-            TextButton(
-              onPressed: () {
-                FirebaseMessaging.instance.subscribeToTopic("my_app_news");
-              },
-              child: Text(
-                "Subscribe to topic: my_app_news",
-                style: AppTextStyle.interSemiBold.copyWith(
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                FirebaseMessaging.instance.unsubscribeFromTopic("my_app_news");
-              },
-              child: Text(
-                "Unsubscribe from topic: my_app_news",
-                style: AppTextStyle.interSemiBold.copyWith(
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                String messageId = await ApiProvider().sendNotificationToUsers(
-                  fcmToken: fcmToken,
-                  title: "Bu test notification",
-                  body: "Yana test notiifcation",
-                );
-                debugPrint("MESSAGE ID:$messageId");
-              },
-              child: Text(
-                "SEND MESSAGE TO USER",
-                style: AppTextStyle.interSemiBold.copyWith(
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                String messageId = await ApiProvider().sendNotificationToUsers(
-                  topicName: "news",
-                  title: "Bu test notification",
-                  body: "Yana test notiifcation",
-                );
-                debugPrint("MESSAGE ID:$messageId");
-              },
-              child: Text(
-                "SEND MESSAGE TO USERS",
-                style: AppTextStyle.interSemiBold.copyWith(
-                  fontSize: 24,
-                ),
-              ),
-            ),
+            // TextButton(
+            //   onPressed: () {
+            //     FirebaseMessaging.instance.subscribeToTopic("my_app_news");
+            //   },
+            //   child: Text(
+            //     "Subscribe to topic: my_app_news",
+            //     style: AppTextStyle.interSemiBold.copyWith(
+            //       fontSize: 24,
+            //     ),
+            //   ),
+            // ),
+            // TextButton(
+            //   onPressed: () {
+            //     FirebaseMessaging.instance.unsubscribeFromTopic("my_app_news");
+            //   },
+            //   child: Text(
+            //     "Unsubscribe from topic: my_app_news",
+            //     style: AppTextStyle.interSemiBold.copyWith(
+            //       fontSize: 24,
+            //     ),
+            //   ),
+            // ),
+            // TextButton(
+            //   onPressed: () async {
+            //     String messageId = await ApiProvider().sendNotificationToUsers(
+            //       fcmToken: fcmToken,
+            //       title: "Bu test notification",
+            //       body: "Yana test notiifcation",
+            //     );
+            //     debugPrint("MESSAGE ID:$messageId");
+            //   },
+            //   child: Text(
+            //     "SEND MESSAGE TO USER",
+            //     style: AppTextStyle.interSemiBold.copyWith(
+            //       fontSize: 24,
+            //     ),
+            //   ),
+            // ),
+            // TextButton(
+            //   onPressed: () async {
+            //     String messageId = await ApiProvider().sendNotificationToUsers(
+            //       topicName: "news",
+            //       title: "Bu test notification",
+            //       body: "Yana test notiifcation",
+            //     );
+            //     debugPrint("MESSAGE ID:$messageId");
+            //   },
+            //   child: Text(
+            //     "SEND MESSAGE TO USERS",
+            //     style: AppTextStyle.interSemiBold.copyWith(
+            //       fontSize: 24,
+            //     ),
+            //   ),
+            // ),
             TextButton(
               onPressed: ()  {
                 Navigator.push(context, MaterialPageRoute(builder: (context){
@@ -129,7 +130,22 @@ class _PushNotificationScreenState extends State<PushNotificationScreen> {
 
               },
               child: Text(
-                "PUSH Notification",
+                "Push notifications",
+                style: AppTextStyle.interSemiBold.copyWith(
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: ()  {
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return PermissionsScreen();
+                }));
+
+
+              },
+              child: Text(
+                "Permissions Screen",
                 style: AppTextStyle.interSemiBold.copyWith(
                   fontSize: 24,
                 ),

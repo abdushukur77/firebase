@@ -36,6 +36,9 @@ dependencies:
   flutter_timezone: ^1.0.4
   firebase_messaging: ^14.7.20
   overlay_support: ^2.1.0
+  permission_handler: ^11.3.1
+  image_picker: ^1.0.7
+  firebase_storage: ^11.6.11
 
 
 

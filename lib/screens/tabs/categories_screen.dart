@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
@@ -11,7 +12,9 @@ import '../../data/model/category_model.dart';
 import '../../data/model/notification_model.dart';
 import '../../data/model/push_notification_model.dart';
 import '../../services/local_notification_service.dart';
+import '../../utils/styles/app_text_style.dart';
 import '../../view_model/category_view_model.dart';
+import '../../view_model/image_view_model.dart';
 import '../../view_model/notification_view_model.dart';
 import '../../view_model/push_notification_view_model.dart';
 
@@ -23,8 +26,10 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
+  final ImagePicker picker = ImagePicker();
 
-
+  String imageUrl = "";
+  String storagePath = "";
 
   @override
   Widget build(BuildContext context) {
@@ -114,47 +119,36 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                         SizedBox(
                                           height: 10.h,
                                         ),
-                                        TextField(
-                                          style: TextStyle(color: Colors.black),
-                                          textInputAction: TextInputAction.next,
-                                          onChanged: (v) {
-                                            imageURL = v;
+                                        SizedBox(height: 24.h),
+                                        TextButton(
+                                          style: TextButton.styleFrom(
+                                            padding: const EdgeInsets.all(24),
+                                            backgroundColor: AppColors.c06070D,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            takeAnImage();
                                           },
-                                          decoration: InputDecoration(
-                                              floatingLabelBehavior:
-                                                  FloatingLabelBehavior.always,
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              hintMaxLines: 4,
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  horizontal: 12, vertical: 14),
-                                              hintText: "Image Url",
-                                              hintStyle: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.black),
-                                                  borderRadius: BorderRadius.circular(
-                                                      12)),
-                                              disabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.black),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: AppColors.black),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12))),
+                                          child: Text(
+                                            "Upload your image",
+                                            style: AppTextStyle.interSemiBold
+                                                .copyWith(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
+                                        SizedBox(height: 12.h),
+                                        if (context
+                                            .watch<ImageViewModel>()
+                                            .getLoader)
+                                          const CircularProgressIndicator(),
+                                        if (imageUrl.isNotEmpty)
+                                          Image.network(imageUrl),
+
                                         Container(
                                           width: double.infinity,
                                           decoration: BoxDecoration(
@@ -166,59 +160,104 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                             children: [
                                               Spacer(),
                                               IconButton(
-                                                onPressed: () async{
-                                                  context
-                                                      .read<CategoryViewModel>()
-                                                      .insertCategory(
-                                                        CategoryModel(
-                                                          imageUrl: imageURL,
-                                                          categoryName:
-                                                              categoriesName,
-                                                          docId: docId,
-                                                        ),
-                                                        context,
-                                                      );
-                                                  // NotificationModel notification = NotificationModel(
-                                                  //     name: "Kategoriya muvaffaqiyatli qoshildi!",
-                                                  //     id: DateTime.now().millisecond
-                                                  // );
-                                                  // context.read<NotificationViewModel>().addNotification(notification);
-                                                  //
-                                                  // LocalNotificationService().showNotification(
-                                                  //   title: notification.name,
-                                                  //   body: "Kategoriya muvaffaqiyatli qoshildi",
-                                                  //   id: notification.id,
-                                                  // );
-                                                  String messageId = await ApiProvider().sendNotificationToUsers(
+                                                onPressed: ()
+                                                async {
+                                                  if (imageUrl.isNotEmpty &&
+                                                      categoriesName.isNotEmpty) {
+                                                    await context.read<CategoryViewModel>().insertCategory(
+                                                      CategoryModel(
+                                                        storagePath: storagePath,
+                                                        imageUrl: imageUrl,
+                                                        categoryName: categoriesName,
+                                                        docId: "",
+                                                      ),
+                                                      context,
+                                                    );
+                                                    Navigator.pop(context);
 
-                                                    title: "Kategoriya muvaffaqiyatli qoshildi",
-                                                    body: "Kategoriya muvaffaqiyatli qoshildi",
-                                                  );
-                                                  debugPrint("MESSAGE ID:$messageId");
-
-                                                  PushNotificationModel notification = PushNotificationModel(
-                                                      name: "Kategoriya muvaffaqiyatli qoshildi!",
-                                                      id: DateTime.now().millisecond);
-                                                  context
-                                                      .read<PushNotificationViewModel>()
-                                                      .addNotification(notification);
-
-                                                  Navigator.pop(context);
+                                                  }
                                                 },
+
+                                                // {
+                                                //   context
+                                                //       .read<CategoryViewModel>()
+                                                //       .updateCategory(
+                                                //         CategoryModel(
+                                                //           imageUrl:
+                                                //               "https://dnr.wisconsin.gov/sites/default/files/feature-images/ECycle_Promotion_Manufacturers.jpg",
+                                                //           categoryName: "Electronics",
+                                                //           docId: category.docId,
+                                                //         ),
+                                                //         context,
+                                                //       );
+                                                // },
                                                 icon: const Icon(
                                                   Icons.add,
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 5.w,
-                                              ),
-                                              const Text(
-                                                "Add Categories",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              Spacer(),
+                                              // IconButton(
+                                              //   onPressed: () async {
+                                              //     context
+                                              //         .read<CategoryViewModel>()
+                                              //         .insertCategory(
+                                              //           CategoryModel(
+                                              //             imageUrl: imageURL,
+                                              //             categoryName:
+                                              //                 categoriesName,
+                                              //             docId: docId,
+                                              //           ),
+                                              //           context,
+                                              //         );
+                                              //     // NotificationModel notification = NotificationModel(
+                                              //     //     name: "Kategoriya muvaffaqiyatli qoshildi!",
+                                              //     //     id: DateTime.now().millisecond
+                                              //     // );
+                                              //     // context.read<NotificationViewModel>().addNotification(notification);
+                                              //     //
+                                              //     // LocalNotificationService().showNotification(
+                                              //     //   title: notification.name,
+                                              //     //   body: "Kategoriya muvaffaqiyatli qoshildi",
+                                              //     //   id: notification.id,
+                                              //     // );
+                                              //     String messageId =
+                                              //         await ApiProvider()
+                                              //             .sendNotificationToUsers(
+                                              //       title:
+                                              //           "Kategoriya muvaffaqiyatli qoshildi",
+                                              //       body:
+                                              //           "Kategoriya muvaffaqiyatli qoshildi",
+                                              //     );
+                                              //     debugPrint(
+                                              //         "MESSAGE ID:$messageId");
+                                              //
+                                              //     PushNotificationModel
+                                              //         notification =
+                                              //         PushNotificationModel(
+                                              //             name:
+                                              //                 "Kategoriya muvaffaqiyatli qoshildi!",
+                                              //             id: DateTime.now()
+                                              //                 .millisecond);
+                                              //     context
+                                              //         .read<
+                                              //             PushNotificationViewModel>()
+                                              //         .addNotification(
+                                              //             notification);
+                                              //
+                                              //     Navigator.pop(context);
+                                              //   },
+                                              //   icon: const Icon(
+                                              //     Icons.add,
+                                              //     color: Colors.white,
+                                              //   ),
+                                              // ),
+                                              // SizedBox(
+                                              //   width: 5.w,
+                                              // ),
+                                              // const Text("Add Categories",
+                                              //     style: TextStyle(
+                                              //         color: Colors.white)),
+
                                             ],
                                           ),
                                         ),
@@ -308,15 +347,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                               .read<CategoryViewModel>()
                                               .deleteCategory(
                                                   category.docId, context);
-                                          NotificationModel notification = NotificationModel(
-                                              name: "Kategoriya muvaffaqiyatli o'chirildi!",
-                                              id: DateTime.now().millisecond
-                                          );
-                                          context.read<NotificationViewModel>().addNotification(notification);
+                                          NotificationModel notification =
+                                              NotificationModel(
+                                                  name:
+                                                      "Kategoriya muvaffaqiyatli o'chirildi!",
+                                                  id: DateTime.now()
+                                                      .millisecond);
+                                          context
+                                              .read<NotificationViewModel>()
+                                              .addNotification(notification);
 
-                                          LocalNotificationService().showNotification(
+                                          LocalNotificationService()
+                                              .showNotification(
                                             title: notification.name,
-                                            body: "Kategoriya muvaffaqiyatli o'chirildi",
+                                            body:
+                                                "Kategoriya muvaffaqiyatli o'chirildi",
                                             id: notification.id,
                                           );
                                         },
@@ -335,19 +380,37 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                         color: AppColors.c_2C2C73,
                                       ),
                                       child: IconButton(
-                                        onPressed: () {
-                                          context
-                                              .read<CategoryViewModel>()
-                                              .updateCategory(
-                                                CategoryModel(
-                                                  imageUrl:
-                                                      "https://dnr.wisconsin.gov/sites/default/files/feature-images/ECycle_Promotion_Manufacturers.jpg",
-                                                  categoryName: "Electronics",
-                                                  docId: category.docId,
-                                                ),
-                                                context,
-                                              );
+                                        onPressed: ()
+                                        async {
+                                          if (imageUrl.isNotEmpty &&
+                                              categoriesName.isNotEmpty) {
+                                            await context.read<CategoryViewModel>().insertCategory(
+                                              CategoryModel(
+                                                storagePath: storagePath,
+                                                imageUrl: imageUrl,
+                                                categoryName: categoriesName,
+                                                docId: "",
+                                              ),
+                                              context,
+                                            );
+
+                                            Navigator.pop(context);
+                                          }
                                         },
+
+                                        // {
+                                        //   context
+                                        //       .read<CategoryViewModel>()
+                                        //       .updateCategory(
+                                        //         CategoryModel(
+                                        //           imageUrl:
+                                        //               "https://dnr.wisconsin.gov/sites/default/files/feature-images/ECycle_Promotion_Manufacturers.jpg",
+                                        //           categoryName: "Electronics",
+                                        //           docId: category.docId,
+                                        //         ),
+                                        //         context,
+                                        //       );
+                                        // },
                                         icon: const Icon(
                                           Icons.edit,
                                           color: Colors.white,
@@ -371,5 +434,76 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _getImageFromCamera() async {
+    XFile? image = await picker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 1024,
+      maxWidth: 1024,
+    );
+    if (image != null && context.mounted) {
+      debugPrint("IMAGE PATH:${image.path}");
+      storagePath = "files/images/${image.name}";
+      imageUrl = await context.read<ImageViewModel>().uploadImage(
+            pickedFile: image,
+            storagePath: storagePath,
+          );
+
+      debugPrint("DOWNLOAD URL:$imageUrl");
+    }
+  }
+
+  Future<void> _getImageFromGallery() async {
+    XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 1024,
+      maxWidth: 1024,
+    );
+    if (image != null && context.mounted) {
+      debugPrint("IMAGE PATH:${image.path}");
+      storagePath = "files/images/${image.name}";
+      imageUrl = await context.read<ImageViewModel>().uploadImage(
+            pickedFile: image,
+            storagePath: storagePath,
+          );
+
+      debugPrint("DOWNLOAD URL:$imageUrl");
+    }
+  }
+
+  takeAnImage() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        )),
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 12.h),
+              ListTile(
+                onTap: () async {
+                  await _getImageFromGallery();
+                  Navigator.pop(context);
+                },
+                leading: const Icon(Icons.photo_album_outlined),
+                title: const Text("Gallereyadan olish"),
+              ),
+              ListTile(
+                onTap: () async {
+                  await _getImageFromCamera();
+                  Navigator.pop(context);
+                },
+                leading: const Icon(Icons.camera_alt),
+                title: const Text("Kameradan olish"),
+              ),
+              SizedBox(height: 24.h),
+            ],
+          );
+        });
   }
 }

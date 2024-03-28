@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:library_app/screens/add_pruduct.dart';
 import 'package:library_app/services/local_notification_service.dart';
 
 import 'package:provider/provider.dart';
@@ -17,9 +18,6 @@ import '../../../view_model/push_notification_view_model.dart';
 import '../detail_screen.dart';
 import 'product_widget.dart';
 
-
-
-
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
 
@@ -27,9 +25,7 @@ class ProductsScreen extends StatefulWidget {
   State<ProductsScreen> createState() => _ProductsScreenState();
 }
 
-
 class _ProductsScreenState extends State<ProductsScreen> {
-
   String fcmToken = "";
 
   void init() async {
@@ -40,7 +36,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     LocalNotificationService.localNotificationService;
     //Foreground
     FirebaseMessaging.onMessage.listen(
-          (RemoteMessage remoteMessage) {
+      (RemoteMessage remoteMessage) {
         if (remoteMessage.notification != null) {
           LocalNotificationService().showNotification(
             title: remoteMessage.notification!.title!,
@@ -64,6 +60,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       }
     });
   }
+
   // _init() async {
   //
   //
@@ -97,51 +94,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: ()async {
-              context.read<ProductViewModel>().insertProduct(
-                    ProductModel(
-                      price: 12.5,
-                      imageUrl:
-                          "https://olcha.uz/image/600x600/products/2022-02-10/smartfon-samsung-galaxy-s22-ultra-5g-35759-0.png",
-                      productName: "S22 Ultra",
-                      docId: "",
-                      productDescription: "productDescription",
-                      categoryId: "",
-                    ),
-                    context,
-                  );
-              // NotificationModel notification = NotificationModel(
-              //     name: "Yangi Mahsulot qo'shildi!",
-              //     id: DateTime.now().millisecond);
-              // context
-              //     .read<NotificationViewModel>()
-              //     .addNotification(notification);
-              //
-              // LocalNotificationService().showNotification(
-              //   title: notification.name,
-              //   body: "Ma'lumot olishingiz mumkin",
-              //   id: notification.id,
-              // );
-              String messageId = await ApiProvider().sendNotificationToUsers(
-                fcmToken: fcmToken,
-                title: "Bu test notification",
-                body: "Yana test notiifcation",
-              );
-              debugPrint("MESSAGE ID:$messageId");
-
-              PushNotificationModel notification = PushNotificationModel(
-                  name: "Yangi Mahsulot qo'shildi!",
-                  id: DateTime.now().millisecond);
-              context
-                  .read<PushNotificationViewModel>()
-                  .addNotification(notification);
-
-              // LocalNotificationService().showNotification(
-              //   title: notification.name,
-              //   body: "Ma'lumot olishingiz mumkin",
-              //   id: notification.id,
-              // );
-              // debugPrint("salommmmmmmmm");
+            onPressed: () async {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AddProduct();
+              }));
             },
             icon: const Icon(Icons.add),
           ),
@@ -165,7 +121,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    padding: const EdgeInsets.all(25),
+                    padding:  EdgeInsets.all(25.w),
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 15,
                     crossAxisCount: 2,
@@ -193,8 +149,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           child: ProductsItem(
                             docId: '',
                             productName: productModel.productName,
-                            productDescription: 'zor telfon',
-                            price: 2500,
+                            productDescription: productModel.productDescription,
+                            price: productModel.price,
                             imageUrl: productModel.imageUrl.toString(),
                             categoryId: '',
                           ),

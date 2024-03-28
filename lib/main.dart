@@ -5,8 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:library_app/screens/routes.dart';
 import 'package:library_app/screens/splash/splash_screen.dart';
 import 'package:library_app/services/local_notification_service.dart';
+import 'package:library_app/utils/permission_utils/app_permissions.dart';
 import 'package:library_app/view_model/auth_view_model.dart';
 import 'package:library_app/view_model/category_view_model.dart';
+import 'package:library_app/view_model/image_view_model.dart';
 import 'package:library_app/view_model/notification_view_model.dart';
 import 'package:library_app/view_model/product_view_model.dart';
 import 'package:library_app/view_model/push_notification_view_model.dart';
@@ -33,6 +35,8 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.instance.subscribeToTopic("news");
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // AppPermissions.getSomePermissions();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => AuthViewModel()),
@@ -41,6 +45,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => ProductViewModel()),
       ChangeNotifierProvider(create: (_) => NotificationViewModel()),
       ChangeNotifierProvider(create: (_) => PushNotificationViewModel()),
+      ChangeNotifierProvider(create: (_) => ImageViewModel()),
     ],
     child: ScreenUtilInit(
       // Wrap with ScreenUtilInit
